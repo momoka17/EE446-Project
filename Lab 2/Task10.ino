@@ -127,6 +127,7 @@ void loop() {
   bool bright = (lightLevel > LIGHT_THRESHOLD);
   bool nearUser = (proximityLevel > PROX_THRESHOLD);
   bool moving = (motionLevel > MOTION_THRESHOLD);
+  bool dark = !bright;
 
   String label;
   if (!noisy && bright && !moving && !nearUser) {
@@ -157,14 +158,25 @@ void loop() {
     }
   }
 
+  Serial.print("raw,mic=");
   Serial.print(soundLevel);
-  Serial.print(",");
+  Serial.print(",clear=");
   Serial.print(lightLevel);
-  Serial.print(",");
-  Serial.print(proximityLevel);
-  Serial.print(",");
+  Serial.print(",motion=");
   Serial.print(motionLevel, 3);
-  Serial.print(",");
+  Serial.print(",prox=");
+  Serial.println(proximityLevel);
+
+  Serial.print("flags,sound=");
+  Serial.print(noisy ? 1 : 0);
+  Serial.print(",dark=");
+  Serial.print(dark ? 1 : 0);
+  Serial.print(",moving=");
+  Serial.print(moving ? 1 : 0);
+  Serial.print(",near=");
+  Serial.println(nearUser ? 1 : 0);
+
+  Serial.print("state,");
   Serial.println(label);
 
   delay(500);
